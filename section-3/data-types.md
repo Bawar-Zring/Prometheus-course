@@ -82,59 +82,59 @@ container_cpu_usage_seconds_total offset 5m
 ### Rate Functions
 1. **`rate()`**: Calculates the per-second average rate of increase of a counter over a time range
    ```
-   rate(http_requests_total[5m])
+   rate(container_cpu_usage_seconds_total[5m])
    ```
    - Use case: Good for stable trend analysis of counters
 
 3. **`irate()`**: Calculates the per-second instantaneous rate of increase using the last two data points
    ```
-   irate(http_requests_total[5m])
+   irate(container_cpu_usage_seconds_total[5m])
    ```
    - Use case: Better for highly volatile, fast-moving counters
 
 4. **`increase()`**: Calculates the total increase in a counter over a time range
    ```
-   increase(http_requests_total[5m])
+   increase(container_cpu_usage_seconds_total[5m])
    ```
    - Use case: When you need the absolute increase rather than a per-second rate, useful for alerting on total counts
 
 ### Delta Functions
 4. **`delta()`**: Calculates the difference between first and last value in a time range
    ```
-   delta(cpu_usage[5m])
+   delta(container_cpu_usage_seconds_total[5m])
    ```
    - Use case: For gauges to see the overall change in value
 
 6. **`idelta()`**: Calculates the difference between the last two samples
    ```
-   idelta(cpu_usage[5m])
+   idelta(container_cpu_usage_seconds_total[5m])
    ```
    - Use case: For identifying the most recent change in a gauge
 
 ### Over Time Functions
 6. **`avg_over_time()`**: Calculates the average value over a time range
    ```
-   avg_over_time(cpu_usage[5m])
+   avg_over_time(container_cpu_usage_seconds_total[5m])
    ```
 
 7. **`min_over_time()`**: Finds the minimum value over a time range
    ```
-   min_over_time(cpu_usage[5m])
+   min_over_time(container_cpu_usage_seconds_total[5m])
    ```
 
 9. **`max_over_time()`**: Finds the maximum value over a time range
    ```
-   max_over_time(cpu_usage[5m])
+   max_over_time(container_cpu_usage_seconds_total[5m])
    ```
 
 10. **`sum_over_time()`**: Calculates the sum of all values over a time range
    ```
-   sum_over_time(cpu_usage[5m])
+   sum_over_time(container_cpu_usage_seconds_total[5m])
    ```
 
 11. **`count_over_time()`**: Counts the number of samples over a time range
     ```
-    count_over_time(cpu_usage[5m])
+    count_over_time(container_cpu_usage_seconds_total[5m])
     ```
 
 
@@ -170,7 +170,7 @@ rate(container_cpu_cfs_throttled_periods_total[5m])
 ```
 ### CPU usage percentage
 ```
-100 * (rate(container_cpu_usage_seconds_total[5m]) / sum(rate(container_cpu_usage_seconds_total[5m])) by (instance))
+sum by (name) (100 * (rate(container_cpu_usage_seconds_total[5m]) / rate(container_cpu_usage_seconds_total[5m])))
 ```
 
 ## Memory
@@ -207,20 +207,11 @@ rate(container_fs_reads_bytes_total[5m])
 rate(container_fs_writes_bytes_total[5m])
 ```
 
-## Reliability Metrics
-
-### Container restart count
-```promql
-increase(container_restart_count[5m])
-```
-### Out of Memory (OOM) kills
-```
-increase(container_oom_kills_total[5m])
-```
 
 ---
 
 *Note: These examples assume you have the standard container metrics exporters like cAdvisor running in your environment.*
+
 
 
 
