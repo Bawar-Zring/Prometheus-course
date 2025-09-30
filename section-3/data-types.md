@@ -6,7 +6,7 @@ This document provides an overview of Prometheus data types, operators, function
 
 Prometheus uses several fundamental data types for its time series database:
 
-### Basic Types
+### Basic Data Types
 
 - **Scalar**: A simple numeric floating-point value
 - **String**: A string value (used in limited contexts)
@@ -18,6 +18,14 @@ Prometheus uses several fundamental data types for its time series database:
     ```
     container_cpu_usage_seconds_total[5m]
     ```
+
+## Metric Types
+
+Prometheus metrics can be of four types:
+- **Counter**: A cumulative metric that increases over time (e.g., `http_requests_total`)
+- **Gauge**: A value that can go up or down (e.g., `memory_usage_bytes`)
+- **Histogram**: Samples observations into configurable buckets and counts them (e.g., request latency)
+- **Summary**: Similar to histogram but provides quantiles over a sliding time window
 
 ## Operators
 
@@ -88,7 +96,7 @@ container_cpu_usage_seconds_total offset 5m
    ```
    increase(http_requests_total[5m])
    ```
-   - Use case: When you need the absolute increase rather than a per-second rate
+   - Use case: When you need the absolute increase rather than a per-second rate, useful for alerting on total counts
 
 ### Delta Functions
 4. **`delta()`**: Calculates the difference between first and last value in a time range
@@ -146,11 +154,11 @@ container_cpu_usage_seconds_total offset 5m
 
 
 
-## Container Monitoring Queries
+# Container Monitoring Queries
 
 Common PromQL queries for monitoring containers in production environments:
 
-### Resource Usage
+## Resource Usage
 
 ### CPU usage rate
 ```promql
@@ -165,54 +173,54 @@ rate(container_cpu_cfs_throttled_periods_total[5m])
 100 * (rate(container_cpu_usage_seconds_total[5m]) / sum(rate(container_cpu_usage_seconds_total[5m])) by (instance))
 ```
 
-#### Memory
+## Memory
+### Memory usage in bytes
 ```promql
-# Memory usage in bytes
 container_memory_usage_bytes
+```
 
-# Memory usage percentage
+### Memory usage percentage
+```
 100 * (container_memory_usage_bytes / container_spec_memory_limit_bytes)
 ```
 
-#### I/O Operations
+## Network I/O Operations
 
-##### Network I/O
+### Network receive throughput
 ```promql
-# Network receive throughput
 rate(container_network_receive_bytes_total[5m])
+```
 
-# Network transmit throughput
+### Network transmit throughput
+```
 rate(container_network_transmit_bytes_total[5m])
 ```
 
-##### Disk I/O
+## Disk I/O
+### Disk read throughput
 ```promql
-# Disk read throughput
 rate(container_fs_reads_bytes_total[5m])
+```
 
-# Disk write throughput
+### Disk write throughput
+```
 rate(container_fs_writes_bytes_total[5m])
 ```
 
-### Reliability Metrics
+## Reliability Metrics
 
+### Container restart count
 ```promql
-# Container restart count
 increase(container_restart_count[5m])
-
-# Out of Memory (OOM) kills
+```
+### Out of Memory (OOM) kills
+```
 increase(container_oom_kills_total[5m])
 ```
-
-## Best Practices
-
-1. **Time Range Selection**: Choose appropriate time ranges for rate/increase functions based on your SLAs and monitoring frequency
-2. **Aggregation Strategy**: Use labels wisely with aggregation functions to maintain visibility while reducing cardinality
-3. **Alert Design**: Prefer rate() for most counter-based alerts, but use irate() for highly dynamic metrics when immediate changes matter
-4. **Performance Considerations**: Avoid complex queries with long lookback windows in high-cardinality environments
 
 ---
 
 *Note: These examples assume you have the standard container metrics exporters like cAdvisor running in your environment.*
+
 
 
