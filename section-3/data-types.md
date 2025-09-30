@@ -44,7 +44,9 @@ Prometheus metrics can be of four types:
 - Less than: `<`
 - Greater or equal: `>=`
 - Less or equal: `<=`
-
+```
+rate(container_cpu_usage_seconds_total{name=~"app|db|nginx"}[5m])
+```
 ### Logical/Set Operators
 - `and`: Intersection of two instant vectors
 - `or`: Union of two instant vectors
@@ -211,6 +213,7 @@ rate(container_fs_writes_bytes_total[5m])
 ---
 
 *Note: These examples assume you have the standard container metrics exporters like cAdvisor running in your environment.*
+
 
 
 
