@@ -133,47 +133,18 @@ container_cpu_usage_seconds_total offset 5m
 
 ### Aggregation Functions
 12. **`topk()`**: Returns the top k elements with the highest values
-    - Example: `topk(5, cpu_usage)`
+    ```
+    topk(5, cpu_usage)
+    ```
     - Use case: Finding the most resource-intensive containers/services
 
-13. **`bottomk()`**: Returns the bottom k elements with the lowest values
-    - Example: `bottomk(5, cpu_usage)`
+14. **`bottomk()`**: Returns the bottom k elements with the lowest values
+    ```
+    bottomk(5, cpu_usage)
+    ```
     - Use case: Finding the least resource-intensive containers/services
 
 
-# Prometheus Functions & Queries Reference
-
-## Most Used Functions in Prometheus
-
-Prometheus provides a powerful query language (PromQL) with various functions to manipulate, aggregate, and analyze time-series data. Below are the most commonly used functions with examples.
-
-### Rate and Change Functions
-
-| Function | Description | Example |
-|----------|-------------|---------|
-| `rate()` | Calculates the per-second average rate of increase of a counter over a specified time range | `rate(http_requests_total[5m])` |
-| `irate()` | Calculates the per-second instantaneous rate of increase of a counter over a specified time range (more responsive to recent changes) | `irate(http_requests_total[5m])` |
-| `increase()` | Calculates the total increase of a counter over a specified time range | `increase(http_requests_total[5m])` |
-| `delta()` | Calculates the difference between the first and last value of a time series over a specified time range | `delta(cpu_usage[5m])` |
-| `idelta()` | Calculates the difference between the last two values of a time series | `idelta(cpu_usage[5m])` |
-
-### Aggregation Functions
-
-| Function | Description | Example |
-|----------|-------------|---------|
-| `sum()` | Aggregates the values of a metric across all time series | `sum(http_requests_total)` |
-| `avg_over_time()` | Calculates the average value of a time series over a specified time range | `avg_over_time(cpu_usage[5m])` |
-| `max()` | Finds the maximum value of a metric across all time series | `max(cpu_usage)` |
-| `min()` | Finds the minimum value of a metric across all time series | `min(cpu_usage)` |
-| `count()` | Counts the number of time series for a given metric | `count(http_requests_total)` |
-
-### Selection and Filtering Functions
-
-| Function | Description | Example |
-|----------|-------------|---------|
-| `topk()` | Returns the top k time series with the highest values for a given metric | `topk(5, cpu_usage)` |
-| `bottomk()` | Returns the bottom k time series with the lowest values for a given metric | `bottomk(5, cpu_usage)` |
-| `quantile()` | Calculates the q-th quantile of a metric over a specified time range | `quantile(0.95, http_request_duration_seconds[5m])` |
 
 ## Container Monitoring Queries
 
@@ -181,15 +152,16 @@ Common PromQL queries for monitoring containers in production environments:
 
 ### Resource Usage
 
-#### CPU
+### CPU usage rate
 ```promql
-# CPU usage rate
 rate(container_cpu_usage_seconds_total[5m])
-
-# CPU throttling
+```
+### CPU throttling
+```
 rate(container_cpu_cfs_throttled_periods_total[5m])
-
-# CPU usage percentage
+```
+### CPU usage percentage
+```
 100 * (rate(container_cpu_usage_seconds_total[5m]) / sum(rate(container_cpu_usage_seconds_total[5m])) by (instance))
 ```
 
@@ -242,4 +214,5 @@ increase(container_oom_kills_total[5m])
 ---
 
 *Note: These examples assume you have the standard container metrics exporters like cAdvisor running in your environment.*
+
 
