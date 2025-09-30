@@ -64,51 +64,72 @@ Prometheus uses several fundamental data types for its time series database:
 ## Time Offset Modifier
 
 The `offset` modifier shifts the time range of a query by a specified duration:
-- Example: `container_cpu_usage_seconds_total offset 5m`
+```
+container_cpu_usage_seconds_total offset 5m
+```
 - Usage: This retrieves data as it was 5 minutes ago
 
 ## Common Prometheus Functions
 
 ### Rate Functions
 1. **`rate()`**: Calculates the per-second average rate of increase of a counter over a time range
-   - Example: `rate(http_requests_total[5m])`
+   ```
+   rate(http_requests_total[5m])
+   ```
    - Use case: Good for stable trend analysis of counters
 
-2. **`irate()`**: Calculates the per-second instantaneous rate of increase using the last two data points
-   - Example: `irate(http_requests_total[5m])`
+3. **`irate()`**: Calculates the per-second instantaneous rate of increase using the last two data points
+   ```
+   irate(http_requests_total[5m])
+   ```
    - Use case: Better for highly volatile, fast-moving counters
 
-3. **`increase()`**: Calculates the total increase in a counter over a time range
-   - Example: `increase(http_requests_total[5m])`
+4. **`increase()`**: Calculates the total increase in a counter over a time range
+   ```
+   increase(http_requests_total[5m])
+   ```
    - Use case: When you need the absolute increase rather than a per-second rate
 
 ### Delta Functions
 4. **`delta()`**: Calculates the difference between first and last value in a time range
-   - Example: `delta(cpu_usage[5m])`
+   ```
+   delta(cpu_usage[5m])
+   ```
    - Use case: For gauges to see the overall change in value
 
-5. **`idelta()`**: Calculates the difference between the last two samples
-   - Example: `idelta(cpu_usage[5m])`
+6. **`idelta()`**: Calculates the difference between the last two samples
+   ```
+   idelta(cpu_usage[5m])
+   ```
    - Use case: For identifying the most recent change in a gauge
 
 ### Over Time Functions
 6. **`avg_over_time()`**: Calculates the average value over a time range
-   - Example: `avg_over_time(cpu_usage[5m])`
+   ```
+   avg_over_time(cpu_usage[5m])
+   ```
 
 7. **`min_over_time()`**: Finds the minimum value over a time range
-   - Example: `min_over_time(cpu_usage[5m])`
+   ```
+   min_over_time(cpu_usage[5m])
+   ```
 
-8. **`max_over_time()`**: Finds the maximum value over a time range
-   - Example: `max_over_time(cpu_usage[5m])`
+9. **`max_over_time()`**: Finds the maximum value over a time range
+   ```
+   max_over_time(cpu_usage[5m])
+   ```
 
-9. **`sum_over_time()`**: Calculates the sum of all values over a time range
-   - Example: `sum_over_time(cpu_usage[5m])`
+10. **`sum_over_time()`**: Calculates the sum of all values over a time range
+   ```
+   sum_over_time(cpu_usage[5m])
+   ```
 
-10. **`count_over_time()`**: Counts the number of samples over a time range
-    - Example: `count_over_time(cpu_usage[5m])`
+11. **`count_over_time()`**: Counts the number of samples over a time range
+    ```
+    count_over_time(cpu_usage[5m])
+    ```
 
-11. **`quantile_over_time()`**: Calculates the φ-quantile over a time range
-    - Example: `quantile_over_time(0.95, http_request_duration_seconds[5m])`
+
 
 ### Aggregation Functions
 12. **`topk()`**: Returns the top k elements with the highest values
@@ -221,3 +242,4 @@ increase(container_oom_kills_total[5m])
 ---
 
 *Note: These examples assume you have the standard container metrics exporters like cAdvisor running in your environment.*
+
