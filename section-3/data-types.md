@@ -74,9 +74,9 @@ rate(container_cpu_usage_seconds_total{name=~"app|db|nginx"}[5m])
 ## Time Offset Modifier
 
 The `offset` modifier shifts the time range of a query by a specified duration:
-```
-container_cpu_usage_seconds_total offset 5m
-```
+    ```
+    container_cpu_usage_seconds_total offset 5m
+    ```
 - Usage: This retrieves data as it was 5 minutes ago
 
 ## Common Prometheus Functions
@@ -138,83 +138,3 @@ container_cpu_usage_seconds_total offset 5m
     ```
     count_over_time(container_cpu_usage_seconds_total[5m])
     ```
-
-
-
-### Aggregation Functions
-12. **`topk()`**: Returns the top k elements with the highest values
-    ```
-    topk(5, cpu_usage)
-    ```
-    - Use case: Finding the most resource-intensive containers/services
-
-14. **`bottomk()`**: Returns the bottom k elements with the lowest values
-    ```
-    bottomk(5, cpu_usage)
-    ```
-    - Use case: Finding the least resource-intensive containers/services
-
-
-
-# Container Monitoring Queries
-
-Common PromQL queries for monitoring containers in production environments:
-
-## Resource Usage
-
-### CPU usage rate
-```promql
-rate(container_cpu_usage_seconds_total[5m])
-```
-### CPU throttling
-```
-rate(container_cpu_cfs_throttled_periods_total[5m])
-```
-### CPU usage percentage
-```
-sum by (name) (100 * (rate(container_cpu_usage_seconds_total[5m]) / rate(container_cpu_usage_seconds_total[5m])))
-```
-
-## Memory
-### Memory usage in bytes
-```promql
-container_memory_usage_bytes
-```
-
-### Memory usage percentage
-```
-100 * (container_memory_usage_bytes / container_spec_memory_limit_bytes)
-```
-
-## Network I/O Operations
-
-### Network receive throughput
-```promql
-rate(container_network_receive_bytes_total[5m])
-```
-
-### Network transmit throughput
-```
-rate(container_network_transmit_bytes_total[5m])
-```
-
-## Disk I/O
-### Disk read throughput
-```promql
-rate(container_fs_reads_bytes_total[5m])
-```
-
-### Disk write throughput
-```
-rate(container_fs_writes_bytes_total[5m])
-```
-
-
----
-
-*Note: These examples assume you have the standard container metrics exporters like cAdvisor running in your environment.*
-
-
-
-
-
