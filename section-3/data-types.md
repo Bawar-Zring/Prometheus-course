@@ -101,7 +101,7 @@ The `offset` modifier shifts the time range of a query by a specified duration:
    - Use case: When you need the absolute increase rather than a per-second rate, useful for alerting on total counts
 
 ### Delta Functions
-4. **`delta()`**: Calculates the difference between first and last value in a time range
+5. **`delta()`**: Calculates the difference between first and last value in a time range
    ```
    delta(container_cpu_usage_seconds_total[5m])
    ```
@@ -114,12 +114,12 @@ The `offset` modifier shifts the time range of a query by a specified duration:
    - Use case: For identifying the most recent change in a gauge
 
 ### Over Time Functions
-6. **`avg_over_time()`**: Calculates the average value over a time range
+7. **`avg_over_time()`**: Calculates the average value over a time range
    ```
    avg_over_time(container_cpu_usage_seconds_total[5m])
    ```
 
-7. **`min_over_time()`**: Finds the minimum value over a time range
+8. **`min_over_time()`**: Finds the minimum value over a time range
    ```
    min_over_time(container_cpu_usage_seconds_total[5m])
    ```
@@ -138,3 +138,19 @@ The `offset` modifier shifts the time range of a query by a specified duration:
     ```
     count_over_time(container_cpu_usage_seconds_total[5m])
     ```
+
+# Prometheus: Aggregation vs Over-Time Functions
+
+| Feature                | Aggregation Functions                   | Over-Time Functions                           |
+|------------------------|------------------------------------------|-----------------------------------------------|
+| **Purpose**            | Combine **multiple series** at one moment | Summarize **one series** over a past time window |
+| **Input Type**         | **Instant vector** (current values)      | **Range vector** (historical samples)         |
+| **Output Type**        | **Instant vector** (one value per group) | **Instant vector** (one summarized value per series) |
+| **Common Functions**   | `sum`, `avg`, `max`, `min`, `count`      | `avg_over_time`, `min_over_time`, `max_over_time`, `sum_over_time` |
+| **Works Best With**    | Both **gauges** and counters (after `rate()`) | Gauges directly, or counters after `rate()` / `increase()` |
+| **Typical Question**   | “What’s the total/average **now** across all pods?” | “What was the average/max **over the last 5m** for each pod?” |
+| **Example**            | `sum(rate(http_requests_total[5m])) by (pod)` | `avg_over_time(container_cpu_usage_seconds_total[5m])` |
+
+👉 **Shortcut:**  
+- **Aggregation → across series, now**  
+- **Over-Time → across past samples, in one series**
