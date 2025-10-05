@@ -151,6 +151,6 @@ The `offset` modifier shifts the time range of a query by a specified duration:
 | **Typical Question**   | “What’s the total/average **now** across all pods?” | “What was the average/max **over the last 5m** for each pod?” |
 | **Example**            | `sum(rate(http_requests_total[5m])) by (pod)` | `avg_over_time(container_cpu_usage_seconds_total[5m])` |
 
-👉 **Shortcut:**  
+**Shortcut:**  
 - **Aggregation → across series, now**  
 - **Over-Time → across past samples, in one series**
