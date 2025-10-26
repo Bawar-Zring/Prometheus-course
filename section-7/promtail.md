@@ -96,6 +96,8 @@ docker_sd_configs:
 
 ### pipeline_stages
 Pipeline stages are used to transform log entries and their labels. The pipeline is executed after the discovery process finishes. The pipeline_stages object consists of a list of stages which correspond to the items listed below.
+for more informatin look at this link:
+https://gitee.com/mirrors/Grafana-Loki/blob/791262dc258e74a5457dedc82879d383cce2e66e/docs/clients/promtail/pipelines.md#pipelines
 
 In most cases, you extract data from logs with regex or json stages. The extracted data is transformed into a temporary map object. The data can then be used by Promtail e.g. as values for labels or as an output. Additionally any other stage aside from docker and cri can access the extracted data.
 ```yml
